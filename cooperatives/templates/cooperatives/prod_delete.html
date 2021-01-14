@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+{% load bootstrap4 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Parheto10">
+        <title>Agro - Map | Traçability</title>
+        {#{% include '_partials/css.html' %}#}
+        {#{% include '_partials/js.html' %}#}
+        <link rel="stylesheet" href="{% static 'dist/css/bootstrap2.min.css' %}">
+        <script src="{% static 'dist/js/jquery-3.5.1.min.js' %}"></script>
+        <script src="{% static 'dist/js/bootstrap2.min.js' %}"></script>
+        <script>
+            $(document).ready(function(){
+                $("#DeleteProdModal").modal('show');
+            });
+        </script>
+    </head>
+    <body>
+        <div class="modal fade"  data-keyboard="false" data-backdrop="static" id="DeleteProdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel" style="font-weight:bold">SUPPRESSION PRODUCTEUR {{ item.nom }} {{ item.prenoms }} ({{ item.code }})</h4>
+                    </div>
+                        <div class="model-body">
+                        <div class="row">
+                            <div class="col-sm-10 offset-1">
+                                <p class="text-danger" style="font-size: 14px; font-weight: bold">le Producteur {{ item.nom }} {{ item.prenoms }} de {{ item.localite }} sera supprimer définitivement,<br /> voulez-vous continuer ?</p>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="modal-footer">
+                        <input type="submit" name="btnValider" value="Confirmer" id="btnValider" class="btn btn-primary" style="font-size:1.7vmin;width:250px" />
+                          <a href="{% url 'cooperatives:producteurs' %}" class="btn btn-danger">
+                              <i class="fa fa-home fa-fw"></i> Annuler
+                          </a>
+                    </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>
