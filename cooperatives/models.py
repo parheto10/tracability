@@ -273,15 +273,15 @@ class Parcelle(models.Model):
     def __str__(self):
         return '%s - (%s)' %(self.id, self.culture)
 
-    # def clean(self):
-    #     # numerotation automatique
-    #     if not self.id:
-    #         tot = Parcelle.objects.count()
-    #         num = tot + 1
-    #         self.code = "%s_%s"%(self.producteur.code, num)
-    #
-    #     if self.sous_section == "":
-    #         self.sous_section = self.producteur.section
+    def clean(self):
+        # numerotation automatique
+        if not self.id:
+            tot = Parcelle.objects.count()
+            num = tot + 1
+            self.code = "%s_%s"%(self.producteur.code, num)
+
+        if self.sous_section == "":
+            self.sous_section = self.producteur.section
 
     def coordonnees(self):
         return str(self.longitude) + ', ' + str(self.latitude)
@@ -315,18 +315,21 @@ class Details_planting(models.Model):
     mort = models.PositiveIntegerField(default=0, verbose_name="NBRE PLANTS MORTS")
     mature = models.PositiveIntegerField(default=0, verbose_name="NBRE PLANTS MATURE")
     observation = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "DETAILS PLANTING"
+        verbose_name = "detail planting"
     # Create your models here.
 
 class Formation(models.Model):
-    copperative = models.ForeignKey(Cooperative, on_delete=models.CASCADE)
+    cooperative = models.ForeignKey(Cooperative, on_delete=models.CASCADE)
     formateur = models.CharField(max_length=255, verbose_name="FORMATEUR")
     libelle = models.CharField(max_length=500, verbose_name='INTITULE DE LA FORMATION')
     # nb_participant = models.PositiveIntegerField(default=0, verbose_name="NOMBRE PATICIPANTS")
-    participant = models.ForeignKey(Producteur, on_delete=models.CASCADE)
+    # participant = models.ManyToManyField(Producteur)
     debut = models.DateField(verbose_name="DATE DEBUT")
     fin = models.DateField(verbose_name="DATE FIN")
     details = models.TextField(blank=True, null=True)
-    observation = models.TextField(blank=True, null=True)
     add_le = models.DateTimeField(auto_now_add=True)
     update_le = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -344,6 +347,28 @@ class Formation(models.Model):
         verbose_name_plural = "FORMATIONS"
         verbose_name = "formation"
         ordering = ["libelle"]
+
+class Detail_Formation(models.Model):
+    formation = models.ForeignKey(Formation, on_delete=models.CASCADE)
+    participant = models.ManyToManyField(Producteur)
+    observation = models.TextField(blank=True, null=True)
+    add_le = models.DateTimeField(auto_now_add=True)
+    update_le = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+    def Participants(self):
+        nb_participants = self.participant.all().count()
+        return nb_participants
+
+    def __str__(self):
+        return "%s" % (self.formation.libelle)
+
+
+
+    class Meta:
+        verbose_name_plural = "DETAILS FORMATIONS"
+        verbose_name = "details formation"
+        # ordering = ["libelle"]
 
 
 # Create your models here.

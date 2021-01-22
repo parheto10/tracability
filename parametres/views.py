@@ -18,9 +18,10 @@ from .models import (
     Origine,
     Prime,
     Projet,
+    Pepiniere,
     Activite,
     Region,
-    Campagne,
+    Campagne, Detail_Pepiniere, Detail_Retrait,
     # Formations,
 )
 
@@ -222,42 +223,34 @@ def detail_proj(request, id=None):
     }
     return render(request, 'projet.html', context)
 
+def pepiniere(request):
+    pepinieres = Pepiniere.objects.all()
+    context = {
+        'pepinieres': pepinieres,
+    }
+    return render(request, 'pepinieres.html', context)
 
-# def formation(request):
-#     formations = Formations.objects.all()
-#     context = {
-#         'formations': formations,
-#     }
-#     return render(request, 'formations.html', context)
-#
-# def detail_formation(request, id=None):
-#     instance = get_object_or_404(Formations, id=id)
-#     cooperative = get_object_or_404(Cooperative, id=id)
-#     # producteurs_proj = Parcelle.objects.all().filter(projet_id=instance).count()
-#     # parcelles = Parcelle.objects.all().filter(projet_id=instance)
-#     # parcelles = Parcelle.objects.all().filter(projet_id=instance)
-#     # nb_parcelles_proj = Parcelle.objects.all().filter(projet_id=instance).count()
-#     # plants = Planting.objects.all().filter(parcelle__projet_id=instance)
-#     # nb_plants_proj = Planting.objects.all().filter(parcelle__projet_id = instance).count()
-#     # superficie_proj = Parcelle.objects.all().filter(projet_id=instance).aggregate(total=Sum('superficie'))['total']
-#     context = {
-#         'instance': instance,
-#         'cooperative':cooperative,
-#         # 'parcelles':parcelles,
-#         # 'nb_parcelles_proj':nb_parcelles_proj,
-#         # 'nb_plants_proj':nb_plants_proj,
-#         # 'plants':plants,
-#         # 'superficie_proj':superficie_proj,
-#         # 'producteurs_proj':producteurs_proj,
-#     }
-#     return render(request, 'detail_formation.html', context)
+def detail_pepiniere(request, id=None):
+    instance = get_object_or_404(Pepiniere, id=id)
+    details_semances = Detail_Pepiniere.objects.all().filter(pepiniere_id=instance)
+    details_retraits = Detail_Retrait.objects.all().filter(pepiniere_id=instance)
+    context = {
+        'instance': instance,
+        'details_semances': details_semances,
+        'details_retraits': details_retraits,
+    }
+    return render(request, 'detail_pepiniere.html', context)
 
 def localisation(request):
     parcelles = Parcelle.objects.all()
+    parcelle_count = parcelles.count()
     context = {
-        'parcelles' : parcelles
+        'parcelles' : parcelles,
+        'parcelle_count':parcelle_count,
+        'parcelle_count':parcelle_count
     }
     return render(request, 'cooperatives/carte.html', context)
+    #return render(request, 'carte2.html', context)
 
 def localisation_coop(request, id=None):
     cooperative = get_object_or_404(Cooperative, id=id)

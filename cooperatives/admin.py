@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
+import django_select2
 
 from .models import (
     Cooperative,
@@ -12,7 +13,14 @@ from .models import (
     Planting,
     Details_planting,
     Formation,
+    Detail_Formation
 )
+
+class CooperativeAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", "sigle", "contacts"]
+
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ["id", "libelle", "responsable"]
 
 # class ProdAdminForm(forms.ModelForm):
 #     def __init__(self, *args, **kwargs):
@@ -61,10 +69,11 @@ class PLantingAdmin(admin.ModelAdmin):
    # list_display_links = ('libequipe',)
    inlines = [DetailsPlantingAdmin]
 
-admin.site.register(Cooperative)
-admin.site.register(Section)
+admin.site.register(Cooperative, CooperativeAdmin)
+admin.site.register(Section, SectionAdmin)
 admin.site.register(Sous_Section)
 admin.site.register(Formation)
+admin.site.register(Detail_Formation)
 admin.site.register(Producteur, ProducteurAdmin)
 admin.site.register(Parcelle, ParcelleAdmin)
 admin.site.register(Planting, PLantingAdmin)

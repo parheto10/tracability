@@ -13,7 +13,7 @@ import json
 from parametres.forms import UserForm
 from parametres.models import Projet
 from .forms import CoopForm, ProdForm, EditProdForm, ParcelleForm, PlantingForm, SectionForm, Sous_SectionForm
-from .models import Cooperative, Section, Sous_Section, Producteur, Parcelle, Planting
+from .models import Cooperative, Section, Sous_Section, Producteur, Parcelle, Planting, Formation, Detail_Formation
 
 
 def is_cooperative(user):
@@ -41,6 +41,7 @@ def coop_dashboard(request):
     cooperative= Cooperative.objects.get(user_id=request.user.id)
     producteurs = Producteur.objects.all().filter(cooperative_id=cooperative)
     nb_producteurs = Producteur.objects.all().filter(cooperative_id=cooperative).count()
+    nb_formations = Formation.objects.all().filter(cooperative_id=cooperative).count()
     parcelles = Parcelle.objects.all().filter(producteur__cooperative_id=cooperative)
     nb_parcelles = Parcelle.objects.all().filter(producteur__cooperative_id=cooperative).count()
     Superficie = Parcelle.objects.all().filter(producteur__cooperative_id=cooperative).aggregate(total=Sum('superficie'))['total']
@@ -49,6 +50,7 @@ def coop_dashboard(request):
     context={
     'cooperative':cooperative,
     'producteurs': producteurs,
+    'nb_formations': nb_formations,
     'nb_producteurs': nb_producteurs,
     'parcelles': parcelles,
     'nb_parcelles': nb_parcelles,
@@ -209,8 +211,8 @@ def parcelles(request):
     }
     return render(request, "cooperatives/parcelles.html", context)
 
-def parcelle_delete(request, code=None):
-    parcelle = get_object_or_404(Parcelle, code=code)
+def parcelle_delete(request, id=None):
+    parcelle = get_object_or_404(Parcelle, id=id)
     parcelle.delete()
     messages.success(request, "Parcelle Supprimer avec Succès")
     return HttpResponseRedirect(reverse('cooperatives:parcelles'))
@@ -581,4 +583,22 @@ def localisation(request):
 #     }
 #     return render(request, 'cooperatives/producteur_dropdown.html', context)
 
+def formation(request):
+    cooperative = Cooperative.objects.get(user_id=request.user.id)
+    formations = Formation.objects.all().filter(cooperative_id=cooperative)
+    context = {
+        'cooperative': cooperative,
+        'formations': formations,
+    }
+    return render(request, 'cooperatives/formations.html', context)
 
+def detail_formation(request, id=None):
+    instance = get_object_or_404(Formation, id=id)
+    detail = Detail_Formation.objects.all().filter(formation_id=instance)
+    # participants = Producteur.objects.all().filter(formation_id=formation)
+    context = {
+        'instance':instance,
+        'detail':detail,
+        # 'participants': participants,
+    }
+    return render(request, 'cooperatives/detail_formation.html', context)

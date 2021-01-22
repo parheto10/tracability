@@ -3,6 +3,19 @@ from django.contrib.auth import get_user_model
 #from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.http import request
+from django_select2 import forms as s2forms
+
+class CooperativeWidget(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "sigle__icontains",
+        #"email__icontains",
+    ]
+
+class SectionWidget(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "libelle__icontains",
+        #"email__icontains",
+    ]
 
 from cooperatives.models import Cooperative, Producteur, Section, Sous_Section, Parcelle, Planting
 # from cooperatives.views import cooperative
@@ -44,6 +57,10 @@ class CoopForm(forms.ModelForm):
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
+        widgets = {
+            "cooperative": CooperativeWidget,
+            #"co_authors": CoAuthorsWidget,
+        }
         fields = [
             'libelle',
             'responsable',

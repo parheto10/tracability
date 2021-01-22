@@ -310,8 +310,9 @@ class Espece(models.Model):
 
 class Pepiniere(models.Model):
     technicien = models.CharField(max_length=255, verbose_name="NOM ET PRENOMS TECHNICIEN")
+    contacts = models.CharField(max_length=50, blank=True, null=True)
     localisation = models.CharField(max_length=255, verbose_name="LOCALITE (S/P - VILLAGE)")
-    total_semance = models.PositiveIntegerField(default=0, verbose_name="QTE TOTAL SEMANCE RECU")
+    total_semance = models.PositiveIntegerField(default=0, verbose_name="QTE TOTAL SEMENCE RECU")
     total_sachet = models.PositiveIntegerField(default=0, verbose_name="QTE TOTAL SACHET RECU")
     sachet_rempli = models.PositiveIntegerField(default=0, verbose_name="QTE TOTAL SACHET REMPLI")
     sachet_perdu = models.PositiveIntegerField(default=0, verbose_name="QTE TOTAL SACHET PERDU")

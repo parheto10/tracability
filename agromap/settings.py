@@ -1,3 +1,4 @@
+
 """
 Django settings for agromap project.
 
@@ -52,10 +53,12 @@ INSTALLED_APPS = [
 
     # other App
     # 'ajax_select',
+    'django_select2',
     'bootstrap4',
     'widget_tweaks',
     'import_export',
     'sorl.thumbnail',
+    'livereload',
     # 'leaflet',
     # 'geojson',
     # 'djgeojson',
@@ -74,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'agromap.urls'
@@ -197,3 +201,25 @@ MAPBOX_KEY = "pk.eyJ1IjoicGFyaGV0bzEwIiwiYSI6ImNraTc4ZGxwbzR2MDkyc2t6amg5NnJsZmU
 #     'group': ('example.lookups', 'GroupLookup'),
 #     'song': ('example.lookups', 'SongLookup'),
 # }
+
+# CACHES = {
+#     # … default cache config and others
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     },
+#
+#     "select2": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+#}
+
+# Tell select2 which cache configuration to use:
+#SELECT2_CACHE_BACKEND = "select2"
